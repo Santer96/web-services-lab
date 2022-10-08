@@ -1,20 +1,40 @@
 package com.lab1.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class User {
     private long id;
     private String name;
-    private String surname;
     private Role role;
+    private final List<Task> tasks;
 
-    // Constructors
-    public User() {
-    }
-
-    public User(long id, String name, String surname, Role role) {
+    public User(long id, String name, Role role) {
         this.id = id;
         this.name = name;
-        this.surname = surname;
         this.role = role;
+        tasks = new ArrayList<>();
+    }
+
+    public void addTask(Task task) {
+        if (!tasks.contains(task)) {
+            tasks.add(task);
+            if (this.equals(task.getAssignee())) {
+                task.setAssignee(this);
+            }
+        }
+    }
+
+    public void removeTask(Task task) {
+        tasks.remove(task);
+        if (task.getAssignee().equals(this)) {
+            task.setAssignee(null);
+        }
+    }
+
+    public boolean containsTask(Task task) {
+        return tasks.contains(task);
     }
 
     // Setters
@@ -24,10 +44,6 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 
     public void setRole(Role role) {
@@ -43,15 +59,33 @@ public class User {
         return name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
     public Role getRole() {
         return role;
     }
 
-    private enum Role {
+    public enum Role {
         FE, BE, CMS, OPS, QA, AQA
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

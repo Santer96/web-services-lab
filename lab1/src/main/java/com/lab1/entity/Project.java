@@ -1,40 +1,55 @@
 package com.lab1.entity;
 
-import com.lab1.message.Messenger;
+import com.lab1.message.Notificator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
 
+    private final List<User> members;
+    private final List<Task> tasks;
     private User administrator;
-    private Messenger adminMessenger;
 
-    private List<User> members;
-    private List<Task> tasks;
-    private Messenger memberMessenger;
+    private Notificator adminNotificator;
+    private Notificator memberNotificator;
 
-    public Project(User administrator, Messenger adminMessenger, Messenger memberMessenger) {
+    public Project(User administrator, Notificator adminNotificator, Notificator memberNotificator) {
         this.administrator = administrator;
-        this.adminMessenger = adminMessenger;
-        this.memberMessenger = memberMessenger;
+        this.adminNotificator = adminNotificator;
+        this.memberNotificator = memberNotificator;
         this.members = new ArrayList<>();
         this.tasks = new ArrayList<>();
+    }
+
+    public void assignTask(User assignee, Task task) {
+        if (!members.contains(assignee)) {
+            adminNotificator.notify(administrator, assignee + " user doesn't belong to this project!");
+        }
+        if (!tasks.contains(task)) {
+            tasks.add(task);
+        }
+        assignee.addTask(task);
+        memberNotificator.notify(assignee, "New task have been assigned to you : " + task);
     }
 
     public void addMember(User member) {
         if (!members.contains(member)) {
             members.add(member);
-            adminMessenger.notify(administrator, "New team member added - " + member.getId());
+            adminNotificator.notify(administrator, "New team member added - " + member);
         }
     }
 
-    public void setAdminMessenger(Messenger adminMessenger) {
-        this.adminMessenger = adminMessenger;
+    public void setAdminMessenger(Notificator adminNotificator) {
+        this.adminNotificator = adminNotificator;
     }
 
-    public void setMemberMessenger(Messenger memberMessenger) {
-        this.memberMessenger = memberMessenger;
+    public void setMemberMessenger(Notificator memberNotificator) {
+        this.memberNotificator = memberNotificator;
+    }
+
+    public void setAdministrator(User newAdmin) {
+        this.administrator = newAdmin;
     }
 
     public List<User> getMembers() {
