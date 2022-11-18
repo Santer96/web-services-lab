@@ -1,5 +1,8 @@
 package com.lab5.renderer;
 
+/**
+ * Used builder pattern
+ */
 public abstract class AbstractRenderer implements Renderer {
 
     protected String title;
