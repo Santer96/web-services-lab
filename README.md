@@ -8,4 +8,5 @@ Lab statuses:
 - Lab 4 : ready to review
 - Lab 5 : ready to review
 - Lab 6 : ready to review
+- Lab 7 : ready to review
 
