@@ -11,4 +11,5 @@ Lab statuses:
 - Lab 7 : ready to review
 - Lab 8 : ready to review
 - Lab 9 : ready to review
+- Lab 10 : ready to review
 
